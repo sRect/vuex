@@ -5,7 +5,9 @@
     <hr>
     我的年龄: {{this.$store.getters.myAge}}
     <hr>
-    <button @click="add()">add 10</button>
+    <button @click="add()">同步 syncAdd 10</button>
+    <button @click="minus()">异步 asyncMinus 10</button>
+
   </div>
 </template>
 
@@ -15,6 +17,9 @@ export default {
   methods: {
     add() {
       this.$store.commit('syncAdd', 10);
+    },
+    minus() {
+      this.$store.dispatch('asyncMinus', 10);
     }
   },
   mounted() {

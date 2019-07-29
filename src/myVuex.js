@@ -1,9 +1,10 @@
 let Vue = null; // vue的实例
 
 class Store {
-  constructor({state, getters, mutations}) {
+  constructor({state, getters, actions, mutations}) {
     let myGetters = getters || {};
     let myMutations = mutations || {};
+    let myActions = actions || {};
     // 这样写的目的：
     // 利用vue自身的data，把state加上set和get属性
     // 这样就可以做到双向绑定,实时监听数据变化，响应视图
@@ -14,6 +15,7 @@ class Store {
         }
       }
     });
+
     this.getters = {};
     // 此时需要把getters属性定义到this.getters中，并且根据状态的变化，重新执行此函数
     Object.keys(myGetters).forEach((getterName) => {
@@ -31,6 +33,13 @@ class Store {
         myMutations[mutationName](this.state, payload);
       }
     })
+
+    this.actions = {};
+    Object.keys(myActions).forEach((actionName) => {
+      this.actions[actionName] = (payload) => {
+        myActions[actionName](this, payload);
+      }
+    })
   }
 
   get state() { // 属性访问器
@@ -39,6 +48,10 @@ class Store {
 
   commit = (type, payload) => { // 找到对应的action执行
     this.mutations[type](payload);
+  }
+
+  dispatch = (type, payload) => {
+    this.actions[type](payload);
   }
 }
 
