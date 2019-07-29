@@ -8,6 +8,11 @@ export default new Vuex.Store({
   state: {
     age: 18
   },
+  getters: {
+    myAge(state) {
+      return state.age + 1;
+    }
+  },
   mutations: {
 
   },
