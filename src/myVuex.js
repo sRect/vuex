@@ -1,8 +1,9 @@
 let Vue = null; // vue的实例
 
 class Store {
-  constructor({state, getters}) {
+  constructor({state, getters, mutations}) {
     let myGetters = getters || {};
+    let myMutations = mutations || {};
     // 这样写的目的：
     // 利用vue自身的data，把state加上set和get属性
     // 这样就可以做到双向绑定,实时监听数据变化，响应视图
@@ -23,10 +24,21 @@ class Store {
       })
     })
 
+    this.mutations = {};
+    // 把用户传过来的mutations放到我们store实例上
+    Object.keys(myMutations).forEach((mutationName) => {
+      this.mutations[mutationName] = (payload) => {
+        myMutations[mutationName](this.state, payload);
+      }
+    })
   }
 
   get state() { // 属性访问器
     return this._s.state;
+  }
+
+  commit = (type, payload) => { // 找到对应的action执行
+    this.mutations[type](payload);
   }
 }
 
