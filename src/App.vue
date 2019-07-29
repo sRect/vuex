@@ -11,7 +11,10 @@
 export default {
   name: 'app',
   mounted() {
-    console.log(this.$store)
+    console.log(this.$store);
+    setTimeout(() => {
+      this.$store.state.age = 20;
+    }, 1000)
   }
 }
 </script>

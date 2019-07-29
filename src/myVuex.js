@@ -3,7 +3,16 @@ let Vue = null; // vue的实例
 class Store {
   constructor({state, getters}) {
     let myGetters = getters || {};
-    this._s = state;
+    // 这样写的目的：
+    // 利用vue自身的data，把state加上set和get属性
+    // 这样就可以做到双向绑定,实时监听数据变化，响应视图
+    this._s = new Vue({
+      data() {
+        return {
+          state
+        }
+      }
+    });
     this.getters = {};
     // 此时需要把getters属性定义到this.getters中，并且根据状态的变化，重新执行此函数
     Object.keys(myGetters).forEach((getterName) => {
@@ -17,7 +26,7 @@ class Store {
   }
 
   get state() { // 属性访问器
-    return this._s;
+    return this._s.state;
   }
 }
 
